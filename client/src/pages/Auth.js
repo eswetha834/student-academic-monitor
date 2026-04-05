@@ -2,21 +2,26 @@ import { useState } from "react";
 import axios from "axios";
 
 const BASE_URL = "http://localhost:5000";
-localStorage.setItem("email", email);
-localStorage.setItem("role", res.data.role);
 
 function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
-
+  const [isLogin, setIsLogin] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    if (!email || !password || (!isLogin && !name)) {
-      alert("Please fill all fields");
+    if (!email || !password || (!isLogin && !name) || (!isLogin && !confirmPassword)) {
+      setError("Please fill all fields");
       return;
+    }
+
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
     }
 
     try {
@@ -27,50 +32,81 @@ function Auth() {
           password,
         });
 
-        alert(res.data.msg);
+        if (res.data && res.data.user) {
+          alert(res.data.msg);
+          
+          // Save user info and token
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("userId", res.data.user.id);
+          localStorage.setItem("name", res.data.user.name);
+          localStorage.setItem("email", res.data.user.email);
+          localStorage.setItem("role", res.data.user.role);
+          localStorage.setItem("department", res.data.user.department);
+          localStorage.setItem("semester", res.data.user.semester);
 
-        // save user info
-        localStorage.setItem("userId", res.data.id);
-        localStorage.setItem("role", res.data.role);
-
-        // role based redirect
-        if (res.data.role === "admin") {
-          window.location.replace("/admin");
-        } else if (res.data.role === "faculty") {
-          window.location.replace("/faculty");
+          // Role based redirect
+          if (res.data.user.role === "admin") {
+            window.location.replace("/admin");
+          } else if (res.data.user.role === "faculty" || res.data.user.role === "teacher") {
+            window.location.replace("/faculty");
+          } else {
+            window.location.replace("/student");
+          }
         } else {
-          window.location.replace("/student");
+          setError(res.data.msg || "Login failed");
         }
       }
-
+      
       // REGISTER
       else {
-        await axios.post(`${BASE_URL}/api/register`, {
+        const res = await axios.post(`${BASE_URL}/api/register`, {
           name,
           email,
           password,
           role,
         });
 
-        alert("Registered Successfully. Please Login.");
-        setIsLogin(true);
+        if (res.data && res.data.user) {
+          alert("Registration successful! Please login.");
+          setIsLogin(true);
+          setName(res.data.user.name);
+          setEmail(res.data.user.email);
+          setRole(res.data.user.role);
+        } else {
+          setError(res.data.msg || "Registration failed");
+        }
       }
     } catch (err) {
       if (err.response) {
-        alert(err.response.data.msg);
-        localStorage.setItem("userId", res.data.id);
-localStorage.setItem("role", res.data.role);
+        // Handle validation errors (array of errors)
+        if (err.response.data.errors) {
+          const errorMessages = err.response.data.errors.map(error => error.msg).join(', ');
+          setError(errorMessages);
+        } else {
+          setError(err.response.data.msg || "Request failed");
+        }
       } else {
-        alert("Backend not running. Start server!");
+        setError("Network error. Please check your connection.");
       }
-      console.error(err);
+      console.error("Auth error:", err);
     }
+  };
+
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setError("");
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.box}>
         <h2>{isLogin ? "Login" : "Register"}</h2>
+        
+        {error && (
+          <div style={{...styles.alert, backgroundColor: "#f8d7da", color: "#721c24"}}>
+            {error}
+          </div>
+        )}
 
         {!isLogin && (
           <input
@@ -79,6 +115,13 @@ localStorage.setItem("role", res.data.role);
             onChange={(e) => setName(e.target.value)}
           />
         )}
+
+        <input
+          placeholder="Email"
+          style={styles.input}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         {!isLogin && (
           <select
@@ -93,17 +136,22 @@ localStorage.setItem("role", res.data.role);
         )}
 
         <input
-          placeholder="Email"
-          style={styles.input}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <input
           type="password"
           placeholder="Password"
           style={styles.input}
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        {!isLogin && (
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            style={styles.input}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        )}
 
         <button style={styles.button} onClick={handleSubmit}>
           {isLogin ? "Login" : "Register"}
@@ -113,15 +161,15 @@ localStorage.setItem("role", res.data.role);
           {isLogin ? "No account?" : "Have account?"}
           <span
             style={styles.link}
-            onClick={() => setIsLogin(!isLogin)}
+            onClick={toggleMode}
           >
-            {isLogin ? " Sign Up" : " Sign In"}
+            {isLogin ? "Sign Up" : "Sign In"}
           </span>
         </p>
       </div>
     </div>
   );
-}
+};
 
 const styles = {
   container: {

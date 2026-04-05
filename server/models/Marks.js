@@ -6,9 +6,11 @@ const marksSchema = new mongoose.Schema({
     ref: "User"
   },
   subject: String,
+  examType: { type: String, default: 'Internal' },
   marks: Number,
   attendance: Number,
-  suggestion: String
+  suggestion: String,
+  date: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model("Marks", marksSchema);
