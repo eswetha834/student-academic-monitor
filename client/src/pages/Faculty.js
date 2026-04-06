@@ -290,11 +290,11 @@ export default function Faculty() {
   ];
 
   const renderDashboard = () => (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", width: "100%" }}>
       <h2 style={{ marginBottom: "20px", color: "#1e293b" }}>Faculty Dashboard Overview</h2>
 
       {/* Stats Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px", marginBottom: "30px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", marginBottom: "30px", width: "100%" }}>
         <div style={{ background: "white", padding: "20px", borderRadius: "12px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <Users size={24} color="#3b82f6" />
@@ -337,9 +337,9 @@ export default function Faculty() {
       </div>
 
       {/* Quick Actions */}
-      <div style={{ background: "white", padding: "20px", borderRadius: "12px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
+      <div style={{ background: "white", padding: "20px", borderRadius: "12px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)", width: "100%" }}>
         <h3 style={{ marginBottom: "15px", color: "#1e293b" }}>Quick Actions</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "15px", width: "100%" }}>
           <button
             onClick={() => setActiveTab("Predictions")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px", background: "#3b82f6", color: "white", border: "none", borderRadius: "8px", cursor: "pointer" }}
@@ -1568,7 +1568,8 @@ export default function Faculty() {
       <div {...getSidebarAwareContainerProps(sidebarOpen, {
         flex: 1,
         transition: "margin-left 0.3s ease",
-        minHeight: "100vh"
+        minHeight: "100vh",
+        padding: "0"
       })}>
         {/* Header */}
         <div style={{ background: "#1e293b", padding: "20px", borderBottom: "1px solid #e5e7eb", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -1579,7 +1580,12 @@ export default function Faculty() {
         </div>
 
         {/* Content */}
-        <div style={{ padding: "0" }}>
+        <div style={{ 
+          width: "100%", 
+          maxWidth: "none", 
+          padding: "20px", 
+          boxSizing: "border-box" 
+        }}>
           {activeTab === "Dashboard" && renderDashboard()}
           {activeTab === "Students" && renderStudents()}
           {activeTab === "Performance" && renderPerformance()}
