@@ -45,8 +45,10 @@ export const getSidebarAwareContainerProps = (sidebarOpen, baseProps = {}) => {
     ...baseProps,
     style: {
       maxWidth: `calc(100vw - ${sidebarWidth}px)`,
+      marginLeft: `${sidebarWidth}px`,
       overflowX: 'hidden',
       boxSizing: 'border-box',
+      transition: 'margin-left 0.3s ease, max-width 0.3s ease',
       ...baseProps.style
     }
   };

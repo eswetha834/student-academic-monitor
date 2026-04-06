@@ -1567,7 +1567,6 @@ export default function Faculty() {
       {/* Main Content */}
       <div {...getSidebarAwareContainerProps(sidebarOpen, {
         flex: 1,
-        marginLeft: sidebarOpen ? "280px" : "80px",
         transition: "margin-left 0.3s ease",
         minHeight: "100vh"
       })}>
