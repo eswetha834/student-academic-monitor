@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Mail, Lock, User, ChevronRight, AlertCircle, CheckCircle2 } from "lucide-react";
-import "../Auth.css";
+// import "../Auth.css"; // Temporarily removed for build fix
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);

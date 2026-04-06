@@ -1,23 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// Import components one by one to find the issue
 import Login from "./pages/Login";
-import Student from "./pages/Student";
-import Faculty from "./pages/Faculty";
-import Admin from "./pages/Admin";
-import Landing from "./pages/Landing";
 
 function App() {
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <BrowserRouter>
       <Routes>
-
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<div style={{padding: '20px', textAlign: 'center'}}>
+          <h1>🎉 Academic Monitoring System</h1>
+          <p>App is loading successfully!</p>
+          <a href="/login">Go to Login</a>
+        </div>} />
         <Route path="/login" element={<Login />} />
-
-        <Route path="/student" element={<Student />} />
-        <Route path="/faculty" element={<Faculty />} />
-        <Route path="/admin" element={<Admin />} />
-
       </Routes>
     </BrowserRouter>
   );
