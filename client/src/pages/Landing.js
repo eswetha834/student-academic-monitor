@@ -1,33 +1,59 @@
 
-import { LayoutDashboard, BookOpen, Users, Brain, Shield, ChevronRight, Mail, Phone, MapPin, Star, Award, Zap, TrendingUp, BarChart3, Target, Clock, CheckCircle, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
-    
-    const scrollToLogin = () => {
-        window.location.href = "/login";
-    };
-
-    const handleDemoRequest = (e) => {
-        e.preventDefault();
-        // Handle demo request
-        alert(`Demo requested for: ${email}`);
-        setEmail("");
-    };
-
     return (
-        <div style={{ minHeight: "100vh", background: "#f8fafc", fontFamily: "'Plus Jakarta Sans', sans-serif", color: "#1e293b" }}>
-
-            {/* NAVBAR */}
-            <nav style={{ position: "fixed", top: 0, width: "100%", height: "80px", background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(226, 232, 240, 0.8)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 80px", zIndex: 1000, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", width: "42px", height: "42px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", color: "white", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)" }}>
-                        <LayoutDashboard size={24} />
-                    </div>
-                    <span style={{ fontWeight: "900", fontSize: "22px", letterSpacing: "-1px", background: "linear-gradient(135deg, #1e293b 0%, #2563eb 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>EDUMONITOR</span>
-                </div>
+        <div style={{ minHeight: "100vh", background: "#f8fafc", padding: "40px", textAlign: "center" }}>
+            <h1 style={{ color: "#1e293b", marginBottom: "20px" }}>
+                Academic Monitoring System
+            </h1>
+            <p style={{ color: "#64748b", marginBottom: "30px" }}>
+                Manage your academic journey with AI-powered insights
+            </p>
+            
+            <div style={{ display: "flex", gap: "20px", justifyContent: "center", flexWrap: "wrap" }}>
+                <Link 
+                    to="/login" 
+                    style={{
+                        background: "#2563eb",
+                        color: "white",
+                        padding: "12px 24px",
+                        borderRadius: "8px",
+                        textDecoration: "none",
+                        fontWeight: "600"
+                    }}
+                >
+                    Login
+                </Link>
+                
+                <Link 
+                    to="/login" 
+                    style={{
+                        background: "#10b981",
+                        color: "white",
+                        padding: "12px 24px",
+                        borderRadius: "8px",
+                        textDecoration: "none",
+                        fontWeight: "600"
+                    }}
+                >
+                    Register
+                </Link>
+            </div>
+            
+            <div style={{ marginTop: "40px", padding: "20px", background: "white", borderRadius: "8px", maxWidth: "600px", margin: "40px auto" }}>
+                <h2 style={{ color: "#1e293b", marginBottom: "15px" }}>Features</h2>
+                <ul style={{ textAlign: "left", color: "#64748b" }}>
+                    <li>Student Dashboard</li>
+                    <li>Faculty Dashboard</li>
+                    <li>Admin Panel</li>
+                    <li>AI Predictions</li>
+                    <li>Performance Analytics</li>
+                </ul>
+            </div>
+        </div>
+    );
+}
                 <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
                     <a href="#about" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px", transition: "color 0.3s" }}>About</a>
                     <a href="#features" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px", transition: "color 0.3s" }}>Features</a>
