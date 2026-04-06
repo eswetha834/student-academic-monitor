@@ -12,8 +12,8 @@ const auth = async (req, res, next) => {
     const token = authHeader.replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret");
     
-    // Get user with populated role
-    const user = await User.findById(decoded.user.id).populate('role');
+    // Get user (role is stored as string, not ObjectId)
+    const user = await User.findById(decoded.user.id);
     
     if (!user) {
       return res.status(401).json({ message: "User not found" });

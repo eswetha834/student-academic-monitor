@@ -7,7 +7,7 @@ import autoTable from 'jspdf-autotable';
 import {
   Users, UserCheck, ShieldAlert, Settings,
   UserPlus, Search, Shield, LogOut,
-  BookOpen, Calendar, BarChart3, Bell, ArrowRight,
+  BookOpen, Calendar, BarChart3, ArrowRight,
   TrendingUp, Clock, FileText, Plus, Edit2, CheckCircle, Brain, X, Download, Star, Menu, Users as UsersIcon, RefreshCw, Trash2
 } from "lucide-react";
 import {
@@ -373,7 +373,6 @@ export default function Admin() {
           <SidebarItem icon={Brain} label="Performance Prediction" />
           <SidebarItem icon={BookOpen} label="Departments" />
           <SidebarItem icon={Calendar} label="Attendance & Marks" />
-          <SidebarItem icon={Bell} label="Notifications" />
           <SidebarItem icon={FileText} label="Reports" />
           <SidebarItem icon={Settings} label="Settings" />
         </div>
@@ -389,7 +388,7 @@ export default function Admin() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div style={{ flex: 1, width: "100%", minWidth: 0, marginLeft: 0, padding: "40px", minHeight: "100vh", boxSizing: "border-box" }}>
+      <div style={{ flex: 1, width: "100%", minWidth: 0, marginLeft: 0, padding: "40px", minHeight: "100vh", boxSizing: "border-box", maxWidth: "100vw", overflowX: "hidden" }}>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px", flexWrap: "wrap", gap: "16px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", minWidth: 0 }}>

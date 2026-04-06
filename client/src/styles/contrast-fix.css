@@ -1,0 +1,198 @@
+/* Text Contrast Fixes for Dark/Light Themes */
+
+/* High contrast text colors */
+.text-contrast-high {
+  color: #ffffff !important; /* Pure white for dark backgrounds */
+}
+
+.text-contrast-medium {
+  color: #f1f5f9 !important; /* Near white for dark backgrounds */
+}
+
+.text-contrast-low {
+  color: #e2e8f0 !important; /* Light gray for dark backgrounds */
+}
+
+.text-contrast-accent {
+  color: #60a5fa !important; /* Light blue for accents */
+}
+
+.text-contrast-success {
+  color: #34d399 !important; /* Light green */
+}
+
+.text-contrast-warning {
+  color: #fbbf24 !important; /* Light yellow */
+}
+
+.text-contrast-error {
+  color: #f87171 !important; /* Light red */
+}
+
+/* Dark theme specific fixes */
+.dark-theme .welcome-text {
+  color: #ffffff !important; /* Pure white for welcome text */
+}
+
+.dark-theme .subtitle-text {
+  color: #f1f5f9 !important; /* Near white for subtitles */
+}
+
+.dark-theme .description-text {
+  color: #e2e8f0 !important; /* Light gray for descriptions */
+}
+
+/* Light theme specific fixes */
+.light-theme .welcome-text {
+  color: #0f172a !important; /* Dark for welcome text */
+}
+
+.light-theme .subtitle-text {
+  color: #334155 !important; /* Medium dark for subtitles */
+}
+
+.light-theme .description-text {
+  color: #475569 !important; /* Lighter dark for descriptions */
+}
+
+/* Header text fixes */
+.header-welcome {
+  color: #f8fafc !important;
+  font-weight: 700;
+}
+
+.header-subtitle {
+  color: #e2e8f0 !important;
+  font-weight: 500;
+}
+
+/* Welcome message specific fixes */
+.welcome-back-text {
+  color: #ffffff !important;
+}
+
+.welcome-name-text {
+  color: #60a5fa !important;
+  font-weight: 600;
+}
+
+.welcome-description {
+  color: #ffffff !important;
+}
+
+/* Card header text */
+.card-header-title {
+  color: #f8fafc !important;
+}
+
+.card-header-subtitle {
+  color: #e2e8f0 !important;
+}
+
+/* Sidebar text fixes */
+.sidebar-welcome {
+  color: #f1f5f9 !important;
+}
+
+.sidebar-subtitle {
+  color: #94a3b8 !important;
+}
+
+/* Form labels and placeholders */
+.form-label {
+  color: #e2e8f0 !important;
+  font-weight: 600;
+}
+
+.form-placeholder {
+  color: #64748b !important;
+}
+
+/* Table headers */
+.table-header {
+  color: #f1f5f9 !important;
+  font-weight: 700;
+}
+
+/* Status indicators */
+.status-online {
+  color: #34d399 !important;
+}
+
+.status-offline {
+  color: #f87171 !important;
+}
+
+.status-away {
+  color: #fbbf24 !important;
+}
+
+/* Responsive text sizing */
+@media (max-width: 768px) {
+  .welcome-text {
+    font-size: 1.25rem !important;
+  }
+  
+  .subtitle-text {
+    font-size: 0.875rem !important;
+  }
+  
+  .description-text {
+    font-size: 0.8125rem !important;
+  }
+}
+
+/* Animation classes for text visibility */
+.text-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.text-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus states for accessibility */
+.text-focusable:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .welcome-text {
+    color: #ffffff !important;
+  }
+  
+  .subtitle-text {
+    color: #ffffff !important;
+  }
+  
+  .description-text {
+    color: #ffffff !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .text-fade-in,
+  .text-slide-up {
+    animation: none;
+  }
+}

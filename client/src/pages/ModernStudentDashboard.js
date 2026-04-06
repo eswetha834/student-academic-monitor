@@ -6,7 +6,6 @@ import {
   Calendar, 
   Clock, 
   Award, 
-  Bell, 
   User,
   BarChart3,
   PieChart,
@@ -34,7 +33,6 @@ import CompactSidebar from '../components/modern/CompactSidebar';
 const ModernStudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('overview');
-  const [notifications, setNotifications] = useState(3);
   const [sidebarOpen, setSidebarOpen] = useState(false); // Start with HIDDEN
   const [selectedSubject, setSelectedSubject] = useState(null);
 
@@ -264,7 +262,6 @@ const ModernStudentDashboard = () => {
         <CompactSidebar 
           activeSection={activeSection}
           onSectionChange={setActiveSection}
-          notifications={notifications}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         />
@@ -293,16 +290,6 @@ const ModernStudentDashboard = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              <button className="relative group btn-glow">
-                <div className="relative p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-300">
-                  <Bell className="w-5 h-5 text-white/80" />
-                  {notifications > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full text-xs text-white font-medium flex items-center justify-center animate-pulse">
-                      {notifications}
-                    </span>
-                  )}
-                </div>
-              </button>
               
               <div className="flex items-center gap-3 px-4 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl">
                 <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">

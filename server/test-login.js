@@ -10,14 +10,14 @@ async function testLogin() {
     await mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/academic-monitor');
     console.log('Connected to MongoDB');
 
-    const email = 'google@gmail.com';
-    const password = 'password';
+    const email = 'admin@gmail.com';
+    const password = 'admin123';
 
     console.log(`\n🔑 Testing login for: ${email}`);
     console.log(`🔑 Password: ${password}`);
 
     // Find user exactly like in login endpoint
-    const user = await User.findOne({ email }).populate('role').select('+password');
+    const user = await User.findOne({ email }).select('+password');
     console.log('\n📋 User Search Results:');
     console.log('User found:', user ? 'Yes' : 'No');
     
@@ -26,7 +26,7 @@ async function testLogin() {
       console.log('- ID:', user._id);
       console.log('- Name:', user.name);
       console.log('- Email:', user.email);
-      console.log('- Role:', user.role ? user.role.name : 'No role');
+      console.log('- Role:', user.role || 'No role');
       console.log('- Password exists:', user.password ? 'Yes' : 'No');
       
       // Test password comparison exactly like in server
@@ -38,7 +38,7 @@ async function testLogin() {
       
       if (isMatch) {
         console.log('\n✅ Login should succeed!');
-        console.log('User role for redirect:', user.role.name);
+        console.log('User role for redirect:', user.role);
       } else {
         console.log('\n❌ Login will fail - Invalid Credentials');
       }

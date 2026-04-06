@@ -1,47 +1,79 @@
 
-import { LayoutDashboard, BookOpen, Users, Brain, Shield, ChevronRight, Mail, Phone, MapPin, Star, Award, Zap } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, Brain, Shield, ChevronRight, Mail, Phone, MapPin, Star, Award, Zap, TrendingUp, BarChart3, Target, Clock, CheckCircle, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
 export default function Landing() {
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    
     const scrollToLogin = () => {
         window.location.href = "/login";
+    };
+
+    const handleDemoRequest = (e) => {
+        e.preventDefault();
+        // Handle demo request
+        alert(`Demo requested for: ${email}`);
+        setEmail("");
     };
 
     return (
         <div style={{ minHeight: "100vh", background: "#f8fafc", fontFamily: "'Plus Jakarta Sans', sans-serif", color: "#1e293b" }}>
 
             {/* NAVBAR */}
-            <nav style={{ position: "fixed", top: 0, width: "100%", height: "80px", background: "rgba(255, 255, 255, 0.8)", backdropFilter: "blur(12px)", borderBottom: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 80px", zIndex: 1000 }}>
+            <nav style={{ position: "fixed", top: 0, width: "100%", height: "80px", background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(226, 232, 240, 0.8)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 80px", zIndex: 1000, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", width: "42px", height: "42px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", color: "white" }}>
+                    <div style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", width: "42px", height: "42px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", color: "white", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)" }}>
                         <LayoutDashboard size={24} />
                     </div>
-                    <span style={{ fontWeight: "900", fontSize: "22px", letterSpacing: "-1px" }}>EDUMONITOR</span>
+                    <span style={{ fontWeight: "900", fontSize: "22px", letterSpacing: "-1px", background: "linear-gradient(135deg, #1e293b 0%, #2563eb 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>EDUMONITOR</span>
                 </div>
                 <div style={{ display: "flex", gap: "40px", alignItems: "center" }}>
-                    <a href="#about" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px" }}>About</a>
-                    <a href="#features" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px" }}>Features</a>
-                    <a href="#contact" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px" }}>Contact</a>
-                    <button onClick={scrollToLogin} style={{ background: "#2563eb", color: "white", padding: "12px 24px", borderRadius: "12px", border: "none", fontWeight: "800", cursor: "pointer", transition: "all 0.3s" }}>Login Portal</button>
+                    <a href="#about" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px", transition: "color 0.3s" }}>About</a>
+                    <a href="#features" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px", transition: "color 0.3s" }}>Features</a>
+                    <a href="#testimonials" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px", transition: "color 0.3s" }}>Testimonials</a>
+                    <a href="#contact" style={{ textDecoration: "none", color: "#64748b", fontWeight: "700", fontSize: "14px", transition: "color 0.3s" }}>Contact</a>
+                    <button onClick={scrollToLogin} style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", color: "white", padding: "12px 24px", borderRadius: "12px", border: "none", fontWeight: "800", cursor: "pointer", transition: "all 0.3s", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)" }}>Login Portal</button>
                 </div>
             </nav>
 
             {/* HERO SECTION */}
-            <section style={{ paddingTop: "180px", paddingBottom: "100px", textAlign: "center", background: "linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%)" }}>
-                <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 20px" }}>
-                    <div style={{ background: "#dcfce7", color: "#166534", padding: "8px 20px", borderRadius: "30px", fontSize: "12px", fontWeight: "900", display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "25px" }}>
+            <section style={{ paddingTop: "180px", paddingBottom: "100px", textAlign: "center", background: "linear-gradient(180deg, #eff6ff 0%, #f8fafc 50%, #ffffff 100%)", position: "relative", overflow: "hidden" }}>
+                {/* Background decoration */}
+                <div style={{ position: "absolute", top: "10%", right: "5%", width: "300px", height: "300px", background: "radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%)", borderRadius: "50%" }}></div>
+                <div style={{ position: "absolute", bottom: "10%", left: "5%", width: "200px", height: "200px", background: "radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)", borderRadius: "50%" }}></div>
+                
+                <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 20px", position: "relative", zIndex: 1 }}>
+                    <div style={{ background: "linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)", color: "#166534", padding: "10px 24px", borderRadius: "30px", fontSize: "12px", fontWeight: "900", display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "30px", boxShadow: "0 4px 12px rgba(34, 197, 94, 0.2)" }}>
                         <Brain size={16} /> POWERED BY ACADEMIC INTELLIGENCE
                     </div>
-                    <h1 style={{ fontSize: "64px", fontWeight: "900", lineHeight: "1.1", marginBottom: "25px", letterSpacing: "-2px" }}>
-                        Monitoring Excellence, <span style={{ color: "#2563eb" }}>Empowering Success.</span>
+                    <h1 style={{ fontSize: "72px", fontWeight: "900", lineHeight: "1.1", marginBottom: "30px", letterSpacing: "-2px", background: "linear-gradient(135deg, #1e293b 0%, #2563eb 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                        Monitoring Excellence,<br /><span style={{ color: "#2563eb" }}>Empowering Success.</span>
                     </h1>
-                    <p style={{ fontSize: "18px", color: "#64748b", maxWidth: "600px", margin: "0 auto 40px", fontWeight: "600", lineHeight: "1.6" }}>
-                        The ultimate Online Academic Performance Monitor for institutions. Real-time insights, AI-driven predictions, and seamless collaboration between Faculty and Students.
+                    <p style={{ fontSize: "20px", color: "#64748b", maxWidth: "650px", margin: "0 auto 50px", fontWeight: "600", lineHeight: "1.7" }}>
+                        Transform your institution with AI-powered academic monitoring. Real-time insights, predictive analytics, and seamless collaboration between faculty and students.
                     </p>
-                    <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
-                        <button onClick={scrollToLogin} style={{ background: "#2563eb", color: "white", padding: "18px 36px", borderRadius: "15px", border: "none", fontWeight: "800", fontSize: "16px", cursor: "pointer", display: "flex", alignItems: "center", gap: "10px", boxShadow: "0 10px 20px -5px rgba(37, 99, 235, 0.4)" }}>
+                    <div style={{ display: "flex", gap: "20px", justifyContent: "center", alignItems: "center" }}>
+                        <button onClick={scrollToLogin} style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", color: "white", padding: "20px 40px", borderRadius: "16px", border: "none", fontWeight: "800", fontSize: "17px", cursor: "pointer", display: "flex", alignItems: "center", gap: "12px", boxShadow: "0 12px 24px -8px rgba(37, 99, 235, 0.4)", transition: "all 0.3s" }}>
                             Get Started <ChevronRight size={20} />
                         </button>
-                        <button style={{ background: "white", color: "#1e293b", padding: "18px 36px", borderRadius: "15px", border: "1px solid #e2e8f0", fontWeight: "800", fontSize: "16px", cursor: "pointer" }}>Watch Demo</button>
+                        <button style={{ background: "white", color: "#1e293b", padding: "20px 40px", borderRadius: "16px", border: "2px solid #e2e8f0", fontWeight: "800", fontSize: "17px", cursor: "pointer", display: "flex", alignItems: "center", gap: "12px", transition: "all 0.3s", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)" }}>
+                            <BarChart3 size={20} /> Watch Demo
+                        </button>
+                    </div>
+                    
+                    {/* Trust indicators */}
+                    <div style={{ display: "flex", gap: "40px", justifyContent: "center", marginTop: "60px" }}>
+                        {[/* eslint-disable-next-line react/prop-types */
+                            { icon: CheckCircle, text: "GDPR Compliant" },
+                            { icon: Shield, text: "Secure Platform" },
+                            { icon: TrendingUp, text: "98% Success Rate" }
+                        ].map((item, i) => (
+                            <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px", color: "#64748b", fontSize: "14px", fontWeight: "600" }}>
+                                <item.icon size={16} style={{ color: "#10b981" }} />
+                                {item.text}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -115,6 +147,64 @@ export default function Landing() {
                 </div>
             </section>
 
+            {/* TESTIMONIALS SECTION */}
+            <section id="testimonials" style={{ padding: "120px 80px", background: "white" }}>
+                <div style={{ textAlign: "center", marginBottom: "80px" }}>
+                    <h2 style={{ fontSize: "42px", fontWeight: "900", marginBottom: "15px", letterSpacing: "-1px" }}>Trusted by Institutions</h2>
+                    <p style={{ color: "#64748b", fontWeight: "600" }}>See what educators and students are saying about EDUMONITOR.</p>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "40px", maxWidth: "1200px", margin: "0 auto" }}>
+                    {[
+                        {
+                            name: "Dr. Sarah Chen",
+                            role: "Dean of Computer Science",
+                            institution: "Tech University",
+                            content: "EDUMONITOR has revolutionized how we track student performance. The AI predictions are remarkably accurate.",
+                            rating: 5,
+                            avatar: "SC"
+                        },
+                        {
+                            name: "Prof. Michael Roberts",
+                            role: "Mathematics Department Head",
+                            institution: "State University",
+                            content: "The faculty dashboard makes it easy to identify at-risk students and provide timely interventions.",
+                            rating: 5,
+                            avatar: "MR"
+                        },
+                        {
+                            name: "Emily Johnson",
+                            role: "Student Representative",
+                            institution: "Liberal Arts College",
+                            content: "I love how I can track my academic progress and communicate directly with my professors through the platform.",
+                            rating: 5,
+                            avatar: "EJ"
+                        }
+                    ].map((testimonial, i) => (
+                        <div key={i} style={{ background: "#f8fafc", padding: "40px", borderRadius: "30px", border: "1px solid #e2e8f0", position: "relative" }}>
+                            <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+                                {[...Array(testimonial.rating)].map((_, j) => (
+                                    <Star key={j} size={16} style={{ color: "#f59e0b", fill: "#f59e0b" }} />
+                                ))}
+                            </div>
+                            <p style={{ color: "#64748b", fontWeight: "600", lineHeight: "1.6", marginBottom: "25px", fontStyle: "italic" }}>
+                                "{testimonial.content}"
+                            </p>
+                            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                                <div style={{ width: "50px", height: "50px", borderRadius: "50%", background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: "800" }}>
+                                    {testimonial.avatar}
+                                </div>
+                                <div>
+                                    <p style={{ margin: 0, fontWeight: "800", fontSize: "16px" }}>{testimonial.name}</p>
+                                    <p style={{ margin: 0, color: "#64748b", fontSize: "14px", fontWeight: "600" }}>{testimonial.role}</p>
+                                    <p style={{ margin: 0, color: "#94a3b8", fontSize: "12px", fontWeight: "600" }}>{testimonial.institution}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
             {/* CONTACT SECTION */}
             <section id="contact" style={{ padding: "120px 80px", background: "white" }}>
                 <div style={{ maxWidth: "1200px", margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "100px", alignItems: "center" }}>
@@ -147,14 +237,44 @@ export default function Landing() {
                             </div>
                         </div>
                     </div>
-                    <div style={{ background: "#f8fafc", padding: "50px", borderRadius: "40px", border: "1px solid #e2e8f0" }}>
-                        <h3 style={{ fontSize: "24px", fontWeight: "900", marginBottom: "30px" }}>Direct Inquiry</h3>
-                        <div style={{ display: "grid", gap: "20px" }}>
-                            <input placeholder="Full Name" style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none" }} />
-                            <input placeholder="Institution Email" style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none" }} />
-                            <textarea placeholder="Message..." rows={4} style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none", resize: "none" }}></textarea>
-                            <button style={{ background: "#1e293b", color: "white", padding: "18px", borderRadius: "15px", border: "none", fontWeight: "800", cursor: "pointer" }}>Send Inquiry</button>
-                        </div>
+                    <div style={{ background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)", padding: "50px", borderRadius: "40px", border: "1px solid #e2e8f0", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)" }}>
+                        <h3 style={{ fontSize: "24px", fontWeight: "900", marginBottom: "30px" }}>Request a Demo</h3>
+                        <form onSubmit={handleDemoRequest} style={{ display: "grid", gap: "20px" }}>
+                            <input 
+                                type="text" 
+                                placeholder="Full Name" 
+                                required
+                                style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none", fontSize: "16px", fontWeight: "600" }} 
+                            />
+                            <input 
+                                type="email" 
+                                placeholder="Institution Email" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none", fontSize: "16px", fontWeight: "600" }} 
+                            />
+                            <select 
+                                style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none", fontSize: "16px", fontWeight: "600", color: "#64748b" }}
+                            >
+                                <option value="">Select Institution Type</option>
+                                <option value="university">University</option>
+                                <option value="college">College</option>
+                                <option value="school">K-12 School</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <textarea 
+                                placeholder="Tell us about your needs..." 
+                                rows={4} 
+                                style={{ padding: "18px", borderRadius: "15px", border: "1px solid #e2e8f0", outline: "none", resize: "none", fontSize: "16px", fontWeight: "600" }}
+                            ></textarea>
+                            <button 
+                                type="submit"
+                                style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)", color: "white", padding: "18px", borderRadius: "15px", border: "none", fontWeight: "800", cursor: "pointer", fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", transition: "all 0.3s" }}
+                            >
+                                <ArrowRight size={20} /> Schedule Demo
+                            </button>
+                        </form>
                     </div>
                 </div>
             </section>

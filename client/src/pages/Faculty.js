@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 import api from "../api";
+import { getSidebarAwareContainerProps, getResponsiveInputProps } from "../utils/responsiveUtils";
 import {
-  Users, TrendingUp, AlertCircle, CheckCircle, Search, Star, Eye, Edit2, Bell, Calendar, BookOpen, FileText, Settings, AlertTriangle,
+  Users, TrendingUp, AlertCircle, CheckCircle, Search, Star, Eye, Edit2, Calendar, BookOpen, FileText, Settings, AlertTriangle,
   BarChart3, Menu, X, GraduationCap, LogOut, Plus, Upload, Download, Trash2, ClipboardList, FolderOutput, CheckCircle2, User, Brain, MessageCircle, Send, Trophy,
   Filter, Target, Award, Activity, Zap, MessageSquare, PieChart, LineChart, BarChart, Clock, Download as DownloadIcon
 } from "lucide-react";
@@ -22,8 +23,6 @@ export default function Faculty() {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentMarks, setStudentMarks] = useState([]);
   const [attendanceDate, setAttendanceDate] = useState(() => new Date().toISOString().split("T")[0]);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [notifList, setNotifList] = useState([]);
   const [toasts, setToasts] = useState([]);
 
   // Performance Prediction States
@@ -284,7 +283,6 @@ export default function Faculty() {
     { id: "Marks", icon: Edit2, label: "Add/Update Marks" },
     { id: "Attendance", icon: Calendar, label: "Attendance" },
     { id: "Chat", icon: MessageCircle, label: "Chat with Students" },
-    { id: "Notifications", icon: Bell, label: "Notifications" },
     { id: "Reports", icon: FileText, label: "Reports & Insights" },
     { id: "Comparison", icon: BarChart, label: "Student Comparison" },
     { id: "Leaderboard", icon: Trophy, label: "Leaderboard" },
@@ -380,21 +378,26 @@ export default function Faculty() {
       <h2 style={{ marginBottom: "20px", color: "#1e293b" }}>Assigned Students</h2>
 
       {/* Search and Filter */}
-      <div style={{ display: "flex", gap: "15px", marginBottom: "20px", flexWrap: "wrap" }}>
-        <div style={{ position: "relative", flex: 1, minWidth: "200px" }}>
+      <div style={{ display: "flex", gap: "15px", marginBottom: "20px", flexWrap: "wrap", maxWidth: "100%" }}>
+        <div style={{ position: "relative", flex: 1, minWidth: "200px", maxWidth: "400px" }}>
           <Search size={18} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#64748b" }} />
           <input
             type="text"
             placeholder="Search students..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ width: "100%", padding: "12px 12px 12px 40px", border: "1px solid #d1d5db", borderRadius: "8px", fontSize: "14px" }}
+            {...getResponsiveInputProps({
+              padding: "12px 12px 12px 40px",
+              border: "1px solid #d1d5db",
+              borderRadius: "8px",
+              fontSize: "14px"
+            })}
           />
         </div>
         <select
           value={departmentFilter}
           onChange={(e) => setDepartmentFilter(e.target.value)}
-          style={{ padding: "12px", border: "1px solid #d1d5db", borderRadius: "8px", minWidth: "150px" }}
+          style={{ padding: "12px", border: "1px solid #d1d5db", borderRadius: "8px", minWidth: "150px", maxWidth: "200px", boxSizing: "border-box" }}
         >
           <option value="all">All Departments</option>
           {departmentsAvailable.map(dept => (
@@ -571,32 +574,309 @@ export default function Faculty() {
       {predictions.length > 0 && (
         <div style={{ background: "white", borderRadius: "12px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)", overflow: "hidden" }}>
           <div style={{ padding: "20px", borderBottom: "1px solid #e5e7eb" }}>
-            <h3 style={{ margin: 0, color: "#1e293b" }}>Prediction Results</h3>
+            <h3 style={{ margin: 0, color: "#1e293b" }}>🤖 AI Prediction Results & Focus Areas</h3>
           </div>
-          <div style={{ maxHeight: "600px", overflowY: "auto" }}>
+          
+          {/* Summary Stats */}
+          <div style={{ padding: "20px", background: "#f8fafc", borderBottom: "1px solid #e5e7eb" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px" }}>
+              <div style={{ textAlign: "center", padding: "15px", background: "white", borderRadius: "8px" }}>
+                <div style={{ fontSize: "24px", fontWeight: "900", color: "#3b82f6" }}>{predictions.length}</div>
+                <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>Total Students</div>
+              </div>
+              <div style={{ textAlign: "center", padding: "15px", background: "white", borderRadius: "8px" }}>
+                <div style={{ fontSize: "24px", fontWeight: "900", color: "#10b981" }}>
+                  {predictions.filter(p => p.prediction.predictedScore >= 75).length}
+                </div>
+                <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>High Performers</div>
+              </div>
+              <div style={{ textAlign: "center", padding: "15px", background: "white", borderRadius: "8px" }}>
+                <div style={{ fontSize: "24px", fontWeight: "900", color: "#f59e0b" }}>
+                  {predictions.filter(p => p.prediction.predictedScore < 50).length}
+                </div>
+                <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>Need Attention</div>
+              </div>
+              <div style={{ textAlign: "center", padding: "15px", background: "white", borderRadius: "8px" }}>
+                <div style={{ fontSize: "24px", fontWeight: "900", color: "#8b5cf6" }}>
+                  {predictions.filter(p => p.prediction.trend === 'improving').length}
+                </div>
+                <div style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>Improving</div>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Teacher Focus Recommendations */}
+          <div style={{ padding: "20px", background: "#f0f9ff", borderBottom: "1px solid #e5e7eb" }}>
+            <h4 style={{ margin: "0 0 15px 0", color: "#1e40af", display: "flex", alignItems: "center", gap: "8px" }}>
+              🎯 AI-Generated Teacher Focus Areas
+            </h4>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+              {(() => {
+                const weakSubjects = {};
+                const atRiskStudents = [];
+                const highPerformers = [];
+                
+                predictions.forEach(prediction => {
+                  // Collect weak subjects
+                  if (prediction.student.weakSubjects) {
+                    prediction.student.weakSubjects.forEach(subject => {
+                      weakSubjects[subject] = (weakSubjects[subject] || 0) + 1;
+                    });
+                  }
+                  
+                  // Categorize students
+                  if (prediction.prediction.predictedScore < 50) atRiskStudents.push(prediction.student.name);
+                  if (prediction.prediction.predictedScore >= 75) highPerformers.push(prediction.student.name);
+                });
+
+                const sortedWeakSubjects = Object.entries(weakSubjects)
+                  .sort(([,a], [,b]) => b - a)
+                  .slice(0, 5);
+
+                return (
+                  <>
+                    <div style={{ background: "white", padding: "18px", borderRadius: "12px", border: "2px solid #fecaca", boxShadow: "0 2px 8px rgba(254, 202, 202, 0.1)" }}>
+                      <h5 style={{ margin: "0 0 12px 0", color: "#991b1b", fontSize: "16px", fontWeight: "700" }}>🚨 Students Needing Attention</h5>
+                      <div style={{ maxHeight: "150px", overflowY: "auto" }}>
+                        {atRiskStudents.length > 0 ? (
+                          atRiskStudents.map((student, idx) => (
+                            <div key={idx} style={{ 
+                              padding: "8px 12px", 
+                              margin: "4px 0", 
+                              fontSize: "14px", 
+                              color: "#7f1d1d", 
+                              background: "#fef2f2", 
+                              borderRadius: "8px",
+                              border: "1px solid #fecaca"
+                            }}>
+                              <strong style={{ color: "#991b1b" }}>⚠️ {student}</strong>
+                            </div>
+                          ))
+                        ) : (
+                          <div style={{ fontSize: "14px", color: "#059669", padding: "20px", textAlign: "center" }}>
+                            ✅ No at-risk students identified
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ background: "white", padding: "18px", borderRadius: "12px", border: "2px solid #fde68a", boxShadow: "0 2px 8px rgba(251, 191, 36, 0.1)" }}>
+                      <h5 style={{ margin: "0 0 12px 0", color: "#92400e", fontSize: "16px", fontWeight: "700" }}>📚 Critical Weak Subjects</h5>
+                      <div style={{ maxHeight: "150px", overflowY: "auto" }}>
+                        {sortedWeakSubjects.length > 0 ? (
+                          sortedWeakSubjects.map(([subject, count], idx) => (
+                            <div key={idx} style={{ 
+                              display: "flex", 
+                              justifyContent: "space-between", 
+                              alignItems: "center", 
+                              padding: "10px 12px", 
+                              margin: "6px 0", 
+                              fontSize: "14px", 
+                              background: "#fffbeb", 
+                              borderRadius: "8px",
+                              border: "1px solid #fde68a"
+                            }}>
+                              <span style={{ color: "#92400e", fontWeight: "600" }}>{subject}</span>
+                              <span style={{ 
+                                background: "#f59e0b", 
+                                padding: "4px 12px", 
+                                borderRadius: "20px", 
+                                fontSize: "12px", 
+                                fontWeight: "700", 
+                                color: "#92400e" 
+                              }}>
+                                {count} students
+                              </span>
+                            </div>
+                          ))
+                        ) : (
+                          <div style={{ fontSize: "14px", color: "#059669", padding: "20px", textAlign: "center" }}>
+                            ✅ No critical weak subjects
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ background: "white", padding: "18px", borderRadius: "12px", border: "2px solid #bbf7d0", boxShadow: "0 2px 8px rgba(34, 197, 94, 0.1)" }}>
+                      <h5 style={{ margin: "0 0 12px 0", color: "#166534", fontSize: "16px", fontWeight: "700" }}>🌟 Top Performers</h5>
+                      <div style={{ maxHeight: "150px", overflowY: "auto" }}>
+                        {highPerformers.length > 0 ? (
+                          highPerformers.slice(0, 5).map((student, idx) => (
+                            <div key={idx} style={{ 
+                              padding: "8px 12px", 
+                              margin: "4px 0", 
+                              fontSize: "14px", 
+                              color: "#064e3b", 
+                              background: "#f0fdf4", 
+                              borderRadius: "8px",
+                              border: "1px solid #bbf7d0"
+                            }}>
+                              🏆 <strong style={{ color: "#166534" }}>{student}</strong>
+                            </div>
+                          ))
+                        ) : (
+                          <div style={{ fontSize: "14px", color: "#059669", padding: "20px", textAlign: "center" }}>
+                            🎯 Top performers emerging
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ background: "white", padding: "18px", borderRadius: "12px", border: "2px solid #ddd6fe", boxShadow: "0 2px 8px rgba(99, 102, 241, 0.1)" }}>
+                      <h5 style={{ margin: "0 0 12px 0", color: "#4338ca", fontSize: "16px", fontWeight: "700" }}>� AI Teaching Strategies</h5>
+                      <div style={{ fontSize: "14px", lineHeight: "1.7", color: "#4c1d95" }}>
+                        <div style={{ marginBottom: "16px" }}>
+                          <strong style={{ color: "#4338ca", fontSize: "15px" }}>🎯 Priority Focus Areas:</strong>
+                          <ul style={{ margin: "8px 0", paddingLeft: "24px", color: "#64748b" }}>
+                            <li style={{ marginBottom: "6px" }}>• Provide extra attention to weak subjects identified above</li>
+                            <li style={{ marginBottom: "6px" }}>• Schedule one-on-one sessions with at-risk students</li>
+                            <li style={{ marginBottom: "6px" }}>• Use peer tutoring for struggling students</li>
+                            <li style={{ marginBottom: "6px" }}>• Implement differentiated instruction techniques</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <strong style={{ color: "#4338ca", fontSize: "15px" }}>📈 Teaching Strategies:</strong>
+                          <ul style={{ margin: "8px 0", paddingLeft: "24px", color: "#64748b" }}>
+                            <li style={{ marginBottom: "6px" }}>• Use formative assessments regularly</li>
+                            <li style={{ marginBottom: "6px" }}>• Provide timely feedback and support</li>
+                            <li style={{ marginBottom: "6px" }}>• Create study groups for weak subjects</li>
+                            <li style={{ marginBottom: "6px" }}>• Adjust teaching pace based on class performance</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+
+          <div style={{ maxHeight: "700px", overflowY: "auto" }}>
             {predictions.map((prediction, index) => (
-              <div key={index} style={{ padding: "15px 20px", borderBottom: "1px solid #f3f4f6", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                  <h4 style={{ margin: 0, color: "#1e293b" }}>{prediction.student.name}</h4>
-                  <p style={{ margin: "4px 0", color: "#64748b", fontSize: "14px" }}>Current GPA: {prediction.student.currentGPA.toFixed(2)}</p>
-                  <p style={{ margin: "4px 0", color: "#64748b", fontSize: "14px" }}>Predicted Score: {prediction.prediction.predictedScore.toFixed(1)}%</p>
-                  <p style={{ margin: "4px 0", color: "#64748b", fontSize: "14px" }}>Trend: {prediction.prediction.trend}</p>
+              <div key={index} style={{ 
+                padding: "24px", 
+                borderBottom: "1px solid #f3f4f6", 
+                background: prediction.prediction.predictedScore >= 75 ? "#f0fdf4" : prediction.prediction.predictedScore >= 50 ? "#fffbeb" : "#fef2f2"
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+                  <div style={{ flex: 1 }}>
+                    <h4 style={{ 
+                      margin: "0 0 12px 0", 
+                      color: "#1e293b", 
+                      fontSize: "18px", 
+                      fontWeight: "800",
+                      display: "flex", 
+                      alignItems: "center", 
+                      gap: "10px"
+                    }}>
+                      {prediction.student.name}
+                      {prediction.prediction.predictedScore >= 75 && <span style={{ background: "#dcfce7", padding: "4px 8px", borderRadius: "8px", fontSize: "11px", color: "#166534", marginLeft: "8px" }}>🌟 Excellent</span>}
+                      {prediction.prediction.predictedScore >= 50 && prediction.prediction.predictedScore < 75 && <span style={{ background: "#fef3c7", padding: "4px 8px", borderRadius: "8px", fontSize: "11px", color: "#92400e", marginLeft: "8px" }}>📈 Good</span>}
+                      {prediction.prediction.predictedScore < 50 && <span style={{ background: "#fee2e2", padding: "4px 8px", borderRadius: "8px", fontSize: "11px", color: "#991b1b", marginLeft: "8px" }}>⚠️ Needs Help</span>}
+                    </h4>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px", marginBottom: "16px" }}>
+                      <div>
+                        <p style={{ margin: "0 0 4px 0", fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Current GPA</p>
+                        <p style={{ margin: 0, fontSize: "20px", fontWeight: "900", color: "#1e293b" }}>{prediction.student.currentGPA.toFixed(2)}</p>
+                      </div>
+                      <div>
+                        <p style={{ margin: "0 0 4px 0", fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Predicted Score</p>
+                        <p style={{ margin: 0, fontSize: "20px", fontWeight: "900", color: prediction.prediction.predictedScore >= 75 ? "#166534" : prediction.prediction.predictedScore >= 50 ? "#92400e" : "#991b1b" }}>{prediction.prediction.predictedScore.toFixed(1)}%</p>
+                      </div>
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+                      <div>
+                        <p style={{ margin: "0 0 4px 0", fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Trend</p>
+                        <p style={{ 
+                          margin: 0, 
+                          fontSize: "16px", 
+                          fontWeight: "700",
+                          color: prediction.prediction.trend === 'improving' ? '#10b981' : 
+                                 prediction.prediction.trend === 'declining' ? '#ef4444' : '#6b7280',
+                          display: "flex", 
+                          alignItems: "center", 
+                          gap: "6px"
+                        }}>
+                          {prediction.prediction.trend === 'improving' ? '📈 Improving' : 
+                           prediction.prediction.trend === 'declining' ? '📉 Declining' : '➡️ Stable'}
+                        </p>
+                      </div>
+                      <div>
+                        <p style={{ margin: "0 0 4px 0", fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Confidence</p>
+                        <p style={{ margin: 0, fontSize: "16px", fontWeight: "700", color: "#3b82f6" }}>{prediction.prediction.confidence}%</p>
+                      </div>
+                    </div>
+                    {prediction.student.weakSubjects && prediction.student.weakSubjects.length > 0 && (
+                      <div style={{ marginTop: "16px" }}>
+                        <p style={{ margin: "0 0 8px 0", fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Weak Subjects</p>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                          {prediction.student.weakSubjects.map((subject, idx) => (
+                            <span key={idx} style={{ 
+                              background: "#fee2e2", 
+                              padding: "4px 8px", 
+                              borderRadius: "12px", 
+                              fontSize: "12px", 
+                              fontWeight: "600", 
+                              color: "#991b1b" 
+                            }}>
+                              {subject}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", marginLeft: "20px" }}>
+                    {prediction.prediction.predictedScore >= 75 && <CheckCircle size={24} color="#10b981" />}
+                    {prediction.prediction.predictedScore >= 50 && prediction.prediction.predictedScore < 75 && <AlertCircle size={24} color="#f59e0b" />}
+                    {prediction.prediction.predictedScore < 50 && <X size={24} color="#ef4444" />}
+                    <span style={{
+                      padding: "6px 12px",
+                      borderRadius: "12px",
+                      fontSize: "13px",
+                      fontWeight: "bold",
+                      background: prediction.prediction.predictedScore >= 75 ? "#dcfce7" : prediction.prediction.predictedScore >= 50 ? "#fef3c7" : "#fee2e2",
+                      color: prediction.prediction.predictedScore >= 75 ? "#166534" : prediction.prediction.predictedScore >= 50 ? "#92400e" : "#991b1b"
+                    }}>
+                      {prediction.prediction.predictedScore >= 75 ? "EXCELLENT" : prediction.prediction.predictedScore >= 50 ? "AVERAGE" : "NEEDS IMPROVEMENT"}
+                    </span>
+                  </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  {prediction.prediction.predictedScore >= 75 && <CheckCircle size={20} color="#10b981" />}
-                  {prediction.prediction.predictedScore >= 50 && prediction.prediction.predictedScore < 75 && <AlertCircle size={20} color="#f59e0b" />}
-                  {prediction.prediction.predictedScore < 50 && <X size={20} color="#ef4444" />}
-                  <span style={{
-                    padding: "4px 8px",
-                    borderRadius: "12px",
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                    background: prediction.prediction.predictedScore >= 75 ? "#dcfce7" : prediction.prediction.predictedScore >= 50 ? "#fef3c7" : "#fee2e2",
-                    color: prediction.prediction.predictedScore >= 75 ? "#166534" : prediction.prediction.predictedScore >= 50 ? "#92400e" : "#991b1b"
+
+                {/* AI-Specific Recommendations for this student */}
+                {prediction.prediction.recommendation && (
+                  <div style={{ 
+                    padding: "16px", 
+                    background: "#eff6ff", 
+                    borderRadius: "12px", 
+                    border: "1px solid #bfdbfe",
+                    marginTop: "16px"
                   }}>
-                    {prediction.prediction.predictedScore >= 75 ? "EXCELLENT" : prediction.prediction.predictedScore >= 50 ? "AVERAGE" : "NEEDS IMPROVEMENT"}
-                  </span>
-                </div>
+                    <h5 style={{ 
+                      margin: "0 0 12px 0", 
+                      color: "#1e40af", 
+                      fontSize: "15px", 
+                      fontWeight: "700", 
+                      display: "flex", 
+                      alignItems: "center", 
+                      gap: "8px" 
+                    }}>
+                      🤖 AI Recommendation for {prediction.student.name}
+                    </h5>
+                    <p style={{ 
+                      margin: 0, 
+                      fontSize: "14px", 
+                      color: "#1e40af", 
+                      lineHeight: "1.6",
+                      padding: "12px",
+                      background: "rgba(255, 255, 255, 0.8)",
+                      borderRadius: "8px",
+                      borderLeft: "4px solid #3b82f6"
+                    }}>
+                      {prediction.prediction.recommendation}
+                    </p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -1285,30 +1565,17 @@ export default function Faculty() {
       </div>
 
       {/* Main Content */}
-      <div style={{
+      <div {...getSidebarAwareContainerProps(sidebarOpen, {
         flex: 1,
         marginLeft: sidebarOpen ? "280px" : "80px",
         transition: "margin-left 0.3s ease",
         minHeight: "100vh"
-      }}>
+      })}>
         {/* Header */}
-        <div style={{ background: "white", padding: "20px", borderBottom: "1px solid #e5e7eb", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "#1e293b", padding: "20px", borderBottom: "1px solid #e5e7eb", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <h1 style={{ margin: 0, color: "#1e293b", fontSize: "24px" }}>Welcome, {facultyName}</h1>
-            <p style={{ margin: "4px 0", color: "#64748b" }}>Faculty Dashboard</p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              style={{ position: "relative", background: "none", border: "none", cursor: "pointer", color: "#64748b" }}
-            >
-              <Bell size={20} />
-              {notifList.length > 0 && (
-                <span style={{ position: "absolute", top: "-8px", right: "-8px", background: "#ef4444", color: "white", borderRadius: "50%", width: "18px", height: "18px", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {notifList.length}
-                </span>
-              )}
-            </button>
+            <h1 style={{ margin: 0, color: "#ffffff", fontSize: "24px" }}>Welcome, {facultyName}</h1>
+            <p style={{ margin: "4px 0", color: "#cbd5e1" }}>Faculty Dashboard</p>
           </div>
         </div>
 
@@ -1321,7 +1588,6 @@ export default function Faculty() {
           {activeTab === "Marks" && renderMarks()}
           {activeTab === "Attendance" && renderAttendance()}
           {activeTab === "Chat" && renderChat()}
-          {activeTab === "Notifications" && <div style={{ padding: "20px" }}><h2>Notifications</h2><p>Feature coming soon...</p></div>}
           {activeTab === "Reports" && renderReports()}
           {activeTab === "Comparison" && renderComparison()}
           {activeTab === "Leaderboard" && renderLeaderboard()}

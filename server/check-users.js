@@ -25,7 +25,7 @@ async function checkUsers() {
     });
 
     // Test specific users
-    const testEmails = ['admin@gmail.com', 'faculty@gmail.com', 'student@gmail.com', 'google@gmail.com'];
+    const testEmails = ['admin@gmail.com', 'faculty@gmail.com', 'student@gmail.com', 'google@gmail.com', 'elango@gmail.com'];
     
     console.log('\n🔍 Testing Specific Users:');
     for (const email of testEmails) {

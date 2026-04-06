@@ -1,0 +1,184 @@
+/* Input Box Overflow Fix */
+
+/* Global container constraints */
+.dashboard-container,
+.main-content,
+.content-wrapper {
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Input field constraints */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Specific input container fixes */
+.search-container,
+.filter-container,
+.form-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  min-width: 200px;
+}
+
+.filter-select {
+  width: 100%;
+  max-width: 200px;
+  min-width: 150px;
+}
+
+/* Table overflow fixes */
+.data-table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  overflow-x: auto;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Form input fixes */
+.form-input {
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+/* Sidebar responsive fixes */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.main-content-with-sidebar {
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+  max-width: calc(100vw - 280px);
+}
+
+.main-content-with-sidebar.collapsed {
+  margin-left: 80px;
+  max-width: calc(100vw - 80px);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .main-content-with-sidebar,
+  .main-content-with-sidebar.collapsed {
+    margin-left: 0;
+    max-width: 100vw;
+  }
+  
+  .search-input {
+    max-width: 100%;
+  }
+  
+  .filter-select {
+    max-width: 100%;
+  }
+  
+  .form-input {
+    max-width: 100%;
+  }
+}
+
+/* Tablet responsive */
+@media (max-width: 1024px) {
+  .search-input {
+    max-width: 300px;
+  }
+  
+  .filter-select {
+    max-width: 180px;
+  }
+}
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Flex container fixes */
+.flex-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.flex-item-grow {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+/* Grid container fixes */
+.grid-container {
+  display: grid;
+  gap: 20px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Modal and dialog fixes */
+.modal-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}

@@ -10,19 +10,12 @@ async function createFaculty() {
     await mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/academic-monitor');
     console.log('Connected to MongoDB');
 
-    // Get faculty role
-    const facultyRole = await Role.findOne({ name: 'faculty' });
-    if (!facultyRole) {
-      console.log('Faculty role not found. Please run create-admin.js first.');
-      process.exit(1);
-    }
-
     const sampleFaculty = [
       {
         name: 'Dr. Sarah Johnson',
         email: 'sarah.johnson@university.edu',
         password: await bcrypt.hash('faculty123', await bcrypt.genSalt(10)),
-        role: facultyRole._id,
+        role: 'teacher',
         department: 'Computer Science',
         semester: '8',
         rollNumber: 'FAC001'
@@ -31,7 +24,7 @@ async function createFaculty() {
         name: 'Prof. Michael Chen',
         email: 'michael.chen@university.edu',
         password: await bcrypt.hash('faculty123', await bcrypt.genSalt(10)),
-        role: facultyRole._id,
+        role: 'teacher',
         department: 'Mathematics',
         semester: '8',
         rollNumber: 'FAC002'
@@ -40,7 +33,7 @@ async function createFaculty() {
         name: 'Dr. Emily Rodriguez',
         email: 'emily.rodriguez@university.edu',
         password: await bcrypt.hash('faculty123', await bcrypt.genSalt(10)),
-        role: facultyRole._id,
+        role: 'teacher',
         department: 'Physics',
         semester: '8',
         rollNumber: 'FAC003'
@@ -49,7 +42,7 @@ async function createFaculty() {
         name: 'Prof. David Kim',
         email: 'david.kim@university.edu',
         password: await bcrypt.hash('faculty123', await bcrypt.genSalt(10)),
-        role: facultyRole._id,
+        role: 'teacher',
         department: 'Chemistry',
         semester: '8',
         rollNumber: 'FAC004'
@@ -58,7 +51,7 @@ async function createFaculty() {
         name: 'Dr. Lisa Anderson',
         email: 'lisa.anderson@university.edu',
         password: await bcrypt.hash('faculty123', await bcrypt.genSalt(10)),
-        role: facultyRole._id,
+        role: 'teacher',
         department: 'Biology',
         semester: '8',
         rollNumber: 'FAC005'

@@ -47,7 +47,7 @@ async function createAdmin() {
       name: 'System Administrator',
       email: 'admin@gmail.com',
       password: hashedPassword,
-      role: adminRole._id,
+      role: adminRole.name || 'admin',
       department: 'Computer Science',
       semester: '8',
       rollNumber: 'ADMIN001'
@@ -76,7 +76,7 @@ async function createAdmin() {
       name: 'John Faculty',
       email: 'faculty@gmail.com',
       password: facultyHashedPassword,
-      role: facultyRole._id,
+      role: facultyRole.name || 'faculty',
       department: 'Computer Science',
       semester: '8',
       rollNumber: 'FAC001'
@@ -105,7 +105,7 @@ async function createAdmin() {
       name: 'Jane Student',
       email: 'student@gmail.com',
       password: studentHashedPassword,
-      role: studentRole._id,
+      role: studentRole.name || 'student',
       department: 'Computer Science',
       semester: '4',
       rollNumber: 'STU001'
