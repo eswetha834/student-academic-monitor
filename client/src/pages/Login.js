@@ -13,7 +13,7 @@ export default function Login() {
   const [message, setMessage] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(false);
 
-  const apiBase = "http://localhost:5000/api";
+  const apiBase = "https://student-academic-monitor.onrender.com/api";
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
