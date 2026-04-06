@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// Production API URL
-const API_BASE_URL = 'https://student-academic-monitor.onrender.com/api';
+// Use environment variable or fallback to production URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://student-academic-monitor.onrender.com/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
