@@ -8,7 +8,20 @@ const StudentTeacherAssignment = require("../models/StudentTeacherAssignment");
 const { jsPDF } = require('jspdf');
 const autoTable = require('jspdf-autotable');
 
-const calculateGPA = (marks) => marks / 10;
+const calculateGPA = (marks) => {
+  // Convert percentage marks to 4.0 scale CGPA
+  if (marks >= 90) return 4.0;
+  if (marks >= 80) return 3.7;
+  if (marks >= 75) return 3.3;
+  if (marks >= 70) return 3.0;
+  if (marks >= 65) return 2.7;
+  if (marks >= 60) return 2.3;
+  if (marks >= 55) return 2.0;
+  if (marks >= 50) return 1.7;
+  if (marks >= 45) return 1.3;
+  if (marks >= 40) return 1.0;
+  return 0.0;
+};
 
 function verifyFaculty(req, res, next) {
   const r = req.user?.role?.name || req.user?.role;
@@ -176,7 +189,7 @@ router.get("/dashboard-data", authMiddleware, verifyFaculty, async (req, res) =>
           rollNumber: student.rollNumber,
           profilePic: student.profilePic,
           averageMarks: Number(avgMarks.toFixed(2)),
-          gpa: Number(gpa.toFixed(2)),
+          cgpa: Number(gpa.toFixed(2)),
           attendancePercent: attendance,
           assignedDate: assignment.assignedDate,
           marksCount: marks.length,
