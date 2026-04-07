@@ -9,9 +9,14 @@ const { jsPDF } = require('jspdf');
 const autoTable = require('jspdf-autotable');
 
 const calculateGPA = (marks) => {
-  // Simple CGPA calculation: total marks divided by number of subjects
-  // Convert to 4.0 scale by dividing by 25 (since 100% = 4.0 CGPA)
-  return marks / 25;
+  // Convert percentage marks to 10.0 scale CGPA
+  // Formula: CGPA = (Percentage / 100) * 10
+  // Example: 85% = 8.5 CGPA, 92% = 9.2 CGPA
+  
+  const cgpa = (marks / 100) * 10;
+  
+  // Round to 2 decimal places and ensure max is 10.0
+  return Math.min(Math.round(cgpa * 100) / 100, 10.0);
 };
 
 function verifyFaculty(req, res, next) {
@@ -164,11 +169,7 @@ router.get("/dashboard-data", authMiddleware, verifyFaculty, async (req, res) =>
         const avgMarks = validMarksCount > 0 ? totalMarks / validMarksCount : 0;
         const gpa = calculateGPA(avgMarks);
         
-        console.log(`Student: ${student.name}`);
-        console.log(`- Total Marks: ${totalMarks}`);
-        console.log(`- Number of Subjects: ${validMarksCount}`);
-        console.log(`- Average Marks: ${avgMarks.toFixed(2)}%`);
-        console.log(`- CGPA: ${gpa.toFixed(2)} (calculated as average/25)`);
+        console.log(`Student: ${student.name}, Total Marks: ${totalMarks}, Valid Count: ${validMarksCount}, Average: ${avgMarks.toFixed(2)}, GPA: ${gpa.toFixed(2)}`);
 
         // Get attendance for this student
         const attRecords = await AttendanceRecord.find({ studentId: student._id });

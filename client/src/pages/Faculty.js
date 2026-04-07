@@ -1432,7 +1432,7 @@ export default function Faculty() {
                 <div style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b" }}>
                   {leaderboardType === 'marks' && `${student.averageMarks || 0}%`}
                   {leaderboardType === 'attendance' && `${student.attendancePercent || 0}%`}
-                  {leaderboardType === 'cgpa' && `${student.cgpa?.toFixed(2) || '0.00'}`}
+                  {leaderboardType === 'cgpa' && `${student.cgpa?.toFixed(2) || '0.00'}/10`}
                 </div>
                 <div style={{ fontSize: "12px", color: "#64748b" }}>
                   {leaderboardType === 'marks' && 'Average Marks'}
