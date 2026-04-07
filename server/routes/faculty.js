@@ -9,39 +9,9 @@ const { jsPDF } = require('jspdf');
 const autoTable = require('jspdf-autotable');
 
 const calculateGPA = (marks) => {
-  // Convert percentage marks to 4.0 scale CGPA with more granular scale
-  if (marks >= 95) return 4.0;
-  if (marks >= 92) return 3.9;
-  if (marks >= 89) return 3.8;
-  if (marks >= 86) return 3.7;
-  if (marks >= 83) return 3.6;
-  if (marks >= 80) return 3.5;
-  if (marks >= 77) return 3.4;
-  if (marks >= 74) return 3.3;
-  if (marks >= 71) return 3.2;
-  if (marks >= 68) return 3.1;
-  if (marks >= 65) return 3.0;
-  if (marks >= 62) return 2.9;
-  if (marks >= 59) return 2.8;
-  if (marks >= 56) return 2.7;
-  if (marks >= 53) return 2.6;
-  if (marks >= 50) return 2.5;
-  if (marks >= 47) return 2.4;
-  if (marks >= 44) return 2.3;
-  if (marks >= 41) return 2.2;
-  if (marks >= 38) return 2.1;
-  if (marks >= 35) return 2.0;
-  if (marks >= 32) return 1.9;
-  if (marks >= 29) return 1.8;
-  if (marks >= 26) return 1.7;
-  if (marks >= 23) return 1.6;
-  if (marks >= 20) return 1.5;
-  if (marks >= 17) return 1.4;
-  if (marks >= 14) return 1.3;
-  if (marks >= 11) return 1.2;
-  if (marks >= 8) return 1.1;
-  if (marks >= 5) return 1.0;
-  return 0.0;
+  // Simple CGPA calculation: total marks divided by number of subjects
+  // Convert to 4.0 scale by dividing by 25 (since 100% = 4.0 CGPA)
+  return marks / 25;
 };
 
 function verifyFaculty(req, res, next) {
@@ -194,7 +164,11 @@ router.get("/dashboard-data", authMiddleware, verifyFaculty, async (req, res) =>
         const avgMarks = validMarksCount > 0 ? totalMarks / validMarksCount : 0;
         const gpa = calculateGPA(avgMarks);
         
-        console.log(`Student: ${student.name}, Total Marks: ${totalMarks}, Valid Count: ${validMarksCount}, Average: ${avgMarks.toFixed(2)}, GPA: ${gpa.toFixed(2)}`);
+        console.log(`Student: ${student.name}`);
+        console.log(`- Total Marks: ${totalMarks}`);
+        console.log(`- Number of Subjects: ${validMarksCount}`);
+        console.log(`- Average Marks: ${avgMarks.toFixed(2)}%`);
+        console.log(`- CGPA: ${gpa.toFixed(2)} (calculated as average/25)`);
 
         // Get attendance for this student
         const attRecords = await AttendanceRecord.find({ studentId: student._id });
