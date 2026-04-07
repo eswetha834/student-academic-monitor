@@ -9,17 +9,38 @@ const { jsPDF } = require('jspdf');
 const autoTable = require('jspdf-autotable');
 
 const calculateGPA = (marks) => {
-  // Convert percentage marks to 4.0 scale CGPA
-  if (marks >= 90) return 4.0;
-  if (marks >= 80) return 3.7;
-  if (marks >= 75) return 3.3;
-  if (marks >= 70) return 3.0;
-  if (marks >= 65) return 2.7;
-  if (marks >= 60) return 2.3;
-  if (marks >= 55) return 2.0;
-  if (marks >= 50) return 1.7;
-  if (marks >= 45) return 1.3;
-  if (marks >= 40) return 1.0;
+  // Convert percentage marks to 4.0 scale CGPA with more granular scale
+  if (marks >= 95) return 4.0;
+  if (marks >= 92) return 3.9;
+  if (marks >= 89) return 3.8;
+  if (marks >= 86) return 3.7;
+  if (marks >= 83) return 3.6;
+  if (marks >= 80) return 3.5;
+  if (marks >= 77) return 3.4;
+  if (marks >= 74) return 3.3;
+  if (marks >= 71) return 3.2;
+  if (marks >= 68) return 3.1;
+  if (marks >= 65) return 3.0;
+  if (marks >= 62) return 2.9;
+  if (marks >= 59) return 2.8;
+  if (marks >= 56) return 2.7;
+  if (marks >= 53) return 2.6;
+  if (marks >= 50) return 2.5;
+  if (marks >= 47) return 2.4;
+  if (marks >= 44) return 2.3;
+  if (marks >= 41) return 2.2;
+  if (marks >= 38) return 2.1;
+  if (marks >= 35) return 2.0;
+  if (marks >= 32) return 1.9;
+  if (marks >= 29) return 1.8;
+  if (marks >= 26) return 1.7;
+  if (marks >= 23) return 1.6;
+  if (marks >= 20) return 1.5;
+  if (marks >= 17) return 1.4;
+  if (marks >= 14) return 1.3;
+  if (marks >= 11) return 1.2;
+  if (marks >= 8) return 1.1;
+  if (marks >= 5) return 1.0;
   return 0.0;
 };
 
@@ -157,14 +178,23 @@ router.get("/dashboard-data", authMiddleware, verifyFaculty, async (req, res) =>
       }).select("_id name email department semester rollNumber profilePic");
 
       if (student) {
-        // Get marks for this student
+        // Get marks for this student (exclude attendance records)
         const marks = await Marks.find({ studentId: student._id });
         let totalMarks = 0;
+        let validMarksCount = 0;
+        
         marks.forEach((m) => {
-          totalMarks += m.marks || 0;
+          // Exclude attendance records from CGPA calculation
+          if (!m.examType || !m.examType.toLowerCase().includes('attendance')) {
+            totalMarks += m.marks || 0;
+            validMarksCount++;
+          }
         });
-        const avgMarks = marks.length ? totalMarks / marks.length : 0;
+        
+        const avgMarks = validMarksCount > 0 ? totalMarks / validMarksCount : 0;
         const gpa = calculateGPA(avgMarks);
+        
+        console.log(`Student: ${student.name}, Total Marks: ${totalMarks}, Valid Count: ${validMarksCount}, Average: ${avgMarks.toFixed(2)}, GPA: ${gpa.toFixed(2)}`);
 
         // Get attendance for this student
         const attRecords = await AttendanceRecord.find({ studentId: student._id });
@@ -192,7 +222,7 @@ router.get("/dashboard-data", authMiddleware, verifyFaculty, async (req, res) =>
           cgpa: Number(gpa.toFixed(2)),
           attendancePercent: attendance,
           assignedDate: assignment.assignedDate,
-          marksCount: marks.length,
+          marksCount: validMarksCount, // Only actual marks, not attendance
           attendanceCount: attRecords.length
         });
 
