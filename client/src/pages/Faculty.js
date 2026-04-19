@@ -87,10 +87,6 @@ export default function Faculty() {
   const [gradeData, setGradeData] = useState({ studentId: '', studentName: '', studentEmail: '', subject: '', marks: '', attendance: '', suggestion: '', examType: 'Internal' });
   const [focusData, setFocusData] = useState({ subject: '', reason: '' });
   const [perfStats, setPerfStats] = useState([]);
-  
-  // CRUD Operations State
-  const [studentMarks, setStudentMarks] = useState([]);
-  const [editingMark, setEditingMark] = useState(null);
 
   // Chat States
   const [chatStudents, setChatStudents] = useState([]);
@@ -195,45 +191,6 @@ export default function Faculty() {
       setChatStudents(res.data || []);
     } catch (err) {
       console.error('Error fetching chat students:', err);
-    }
-  };
-
-  // CRUD Functions for Marks
-  const fetchStudentMarks = async (studentId) => {
-    try {
-      const res = await api.get(`/faculty/student-marks/${studentId}`);
-      setStudentMarks(res.data.marks || []);
-    } catch (err) {
-      console.error('Error fetching student marks:', err);
-      showToast('Error fetching marks', 'error');
-    }
-  };
-
-  const editMark = (mark) => {
-    setEditingMark(mark);
-    setGradeData({
-      subject: mark.subject,
-      marks: mark.marks,
-      examType: mark.examType,
-      attendance: mark.attendance || 0,
-      suggestion: mark.suggestion || ''
-    });
-  };
-
-  const deleteMark = async (markId) => {
-    if (window.confirm('Are you sure you want to delete this mark? This action cannot be undone.')) {
-      try {
-        await api.delete(`/faculty/marks/${markId}`);
-        showToast('Mark deleted successfully', 'success');
-        
-        // Refresh marks list
-        if (gradeData.studentId) {
-          fetchStudentMarks(gradeData.studentId);
-        }
-      } catch (err) {
-        console.error('Error deleting mark:', err);
-        showToast('Error deleting mark', 'error');
-      }
     }
   };
 
@@ -930,182 +887,25 @@ export default function Faculty() {
 
   const renderMarks = () => (
     <div style={{ padding: "20px" }}>
-      <h2 style={{ marginBottom: "20px", color: "#1e293b" }}>Marks Management (CRUD)</h2>
+      <h2 style={{ marginBottom: "20px", color: "#1e293b" }}>Add/Update Marks</h2>
 
       <div style={{ background: "white", padding: "20px", borderRadius: "12px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
-        
-        {/* View Existing Marks Section */}
-        <div style={{ marginBottom: "30px" }}>
-          <h3 style={{ marginBottom: "15px", color: "#1e293b" }}>📋 View Existing Marks</h3>
-          
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", marginBottom: "8px", fontWeight: "600", color: "#374151" }}>
-              Select Student to View Marks *
-            </label>
-            <select
-              value={gradeData.studentId || ''}
-              onChange={(e) => {
-                const selected = students.find(s => s._id === e.target.value);
-                setGradeData({ 
-                  ...gradeData, 
-                  studentId: e.target.value,
-                  studentName: selected?.name || '',
-                  studentEmail: selected?.email || ''
-                });
-                fetchStudentMarks(e.target.value);
-              }}
-              style={{ 
-                width: "100%",
-                padding: "12px", 
-                border: "1px solid #d1d5db", 
-                borderRadius: "8px",
-                fontSize: "14px",
-                background: "white"
-              }}
-            >
-              <option value="">-- Select Student --</option>
-              {students.map(student => (
-                <option key={student._id} value={student._id}>
-                  {student.name} ({student.email})
-                </option>
-              ))}
-            </select>
-          </div>
+        <h3 style={{ marginBottom: "15px", color: "#1e293b" }}>Update Student Marks</h3>
 
-          {/* Display Existing Marks */}
-          {studentMarks.length > 0 && (
-            <div style={{ background: "#f8fafc", padding: "15px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-              <h4 style={{ margin: "0 0 10px 0", color: "#1e293b" }}>📊 Current Marks for {gradeData.studentName}</h4>
-              <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
-                  <thead>
-                    <tr style={{ background: "#f1f5f9" }}>
-                      <th style={{ padding: "12px", textAlign: "left", border: "1px solid #e2e8f0", color: "white" }}>Subject</th>
-                      <th style={{ padding: "12px", textAlign: "left", border: "1px solid #e2e8f0", color: "white" }}>Exam Type</th>
-                      <th style={{ padding: "12px", textAlign: "left", border: "1px solid #e2e8f0", color: "white" }}>Marks</th>
-                      <th style={{ padding: "12px", textAlign: "left", border: "1px solid #e2e8f0", color: "white" }}>Grade</th>
-                      <th style={{ padding: "12px", textAlign: "left", border: "1px solid #e2e8f0", color: "white" }}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentMarks.map((mark, index) => (
-                      <tr key={index} style={{ borderBottom: "1px solid #e2e8f0" }}>
-                        <td style={{ padding: "12px", border: "1px solid #e2e8f0" }}>{mark.subject}</td>
-                        <td style={{ padding: "12px", border: "1px solid #e2e8f0" }}>{mark.examType}</td>
-                        <td style={{ padding: "12px", border: "1px solid #e2e8f0", fontWeight: "bold" }}>
-                          <span style={{ 
-                            color: mark.marks >= 75 ? "#10b981" : mark.marks >= 60 ? "#f59e0b" : mark.marks >= 40 ? "#6b7280" : "#ef4444",
-                            fontWeight: "bold"
-                          }}>
-                            {mark.marks}%
-                          </span>
-                        </td>
-                        <td style={{ padding: "12px", border: "1px solid #e2e8f0" }}>
-                          <span style={{ 
-                            padding: "4px 8px",
-                            borderRadius: "4px",
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            background: mark.marks >= 75 ? "#dcfce7" : mark.marks >= 60 ? "#fef3c7" : mark.marks >= 40 ? "#fed7aa" : "#fee2e2",
-                            color: mark.marks >= 75 ? "#166534" : mark.marks >= 60 ? "#92400e" : mark.marks >= 40 ? "#92400e" : "#991b1b"
-                          }}>
-                            {mark.marks >= 75 ? 'A+' : mark.marks >= 60 ? 'A' : mark.marks >= 50 ? 'B+' : mark.marks >= 40 ? 'B' : 'C'}
-                          </span>
-                        </td>
-                        <td style={{ padding: "12px", border: "1px solid #e2e8f0" }}>
-                          <div style={{ display: "flex", gap: "8px" }}>
-                            <button
-                              onClick={() => editMark(mark)}
-                              style={{ 
-                                padding: "4px 8px",
-                                background: "#3b82f6",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "12px"
-                              }}
-                            >
-                              ✏️ Edit
-                            </button>
-                            <button
-                              onClick={() => deleteMark(mark._id)}
-                              style={{ 
-                                padding: "4px 8px",
-                                background: "#ef4444",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                fontSize: "12px"
-                              }}
-                            >
-                              🗑️ Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Add/Update Marks Form */}
-        <div style={{ borderTop: "2px solid #e2e8f0", paddingTop: "20px" }}>
-          <h3 style={{ marginBottom: "15px", color: "#1e293b" }}>
-            {editingMark ? '✏️ Edit Mark' : '➕ Add New Mark'}
-          </h3>
-
-          <form onSubmit={async (e) => {
-            e.preventDefault();
-            
-            if (!gradeData.studentId) {
-              showToast('Please select a student', 'error');
-              return;
-            }
-            
-            try {
-              if (editingMark) {
-                // UPDATE operation
-                await api.put(`/faculty/marks/${editingMark._id}`, {
-                  subject: gradeData.subject,
-                  marks: parseInt(gradeData.marks),
-                  examType: gradeData.examType,
-                  attendance: parseInt(gradeData.attendance) || 0
-                });
-                showToast('Mark updated successfully', 'success');
-                setEditingMark(null);
-              } else {
-                // CREATE operation
-                await api.post('/faculty/marks', {
-                  studentId: gradeData.studentId,
-                  subject: gradeData.subject,
-                  marks: parseInt(gradeData.marks),
-                  examType: gradeData.examType,
-                  attendance: parseInt(gradeData.attendance) || 0
-                });
-                showToast('Mark added successfully', 'success');
-              }
-              
-              // Reset form and refresh
-              setGradeData({ 
-                studentId: '', 
-                subject: '', 
-                marks: '', 
-                attendance: '', 
-                suggestion: '', 
-                examType: 'Internal' 
-              });
-              if (gradeData.studentId) {
-                fetchStudentMarks(gradeData.studentId);
-              }
-            } catch (err) {
-              showToast(`Error ${editingMark ? 'updating' : 'adding'} mark`, 'error');
-            }
-          }}>
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          if (!gradeData.studentId) {
+            showToast('Please select a student', 'error');
+            return;
+          }
+          try {
+            await api.post('/faculty/marks', gradeData);
+            showToast('Marks updated successfully', 'success');
+            setGradeData({ studentId: '', subject: '', marks: '', attendance: '', suggestion: '', examType: 'Internal' });
+          } catch (err) {
+            showToast('Error updating marks', 'error');
+          }
+        }}>
           {/* Student Selection */}
           <div style={{ marginBottom: "20px" }}>
             <label style={{ display: "block", marginBottom: "8px", fontWeight: "600", color: "#374151" }}>
